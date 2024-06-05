@@ -28,11 +28,11 @@ public class Hooks extends DriverFactory {
 
         switch (environmentType.toLowerCase()) {
             case "local":
-                log.error("Initiating the Local WebDriver instance...");
+                log.info("Initiating the Local WebDriver instance...");
                 createLocalDriver();
                 break;
             case "remote":
-                log.error("Initiating the Remote WebDriver instance...");
+                log.info("Initiating the Remote WebDriver instance...");
                 createRemoteDriver();
                 break;
             default:

@@ -15,6 +15,7 @@ import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ThreadGuard;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -22,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DriverFactory {
 
-    //public WebDriver driver;
+    public static WebDriver driver;
     public static ThreadLocal<WebDriver> tlDriver = new ThreadLocal<>();
     public static ThreadLocal<RemoteWebDriver> rtlDriver = new ThreadLocal<>();
     public static String browser = ReadConfigFile.readConfig("browser");
@@ -40,7 +41,8 @@ public class DriverFactory {
                 case "chrome":
                     log.info("Chrome browser is getting instantiated..");
                     WebDriverManager.chromedriver().setup();
-                    tlDriver.set(new ChromeDriver());
+                    //tlDriver.set(new ChromeDriver());
+                    tlDriver.set(ThreadGuard.protect(new ChromeDriver()));
                     //options - to set Capabilities for the chrome instance.
                     //ChromeOptions options = new ChromeOptions();
                     //driver = new ChromeDriver(options);
@@ -49,11 +51,11 @@ public class DriverFactory {
                     WebDriverManager.firefoxdriver().setup();
                     //DesiredCapabilities capabilities = DesiredCapabilities.firefox();
                     //capabilities.setCapability("marionette", true);
-                    tlDriver.set(new FirefoxDriver());
+                    tlDriver.set(ThreadGuard.protect(new FirefoxDriver()));
                     break;
                 case "ie":
                     WebDriverManager.iedriver().setup();
-                    tlDriver.set(new InternetExplorerDriver());
+                    tlDriver.set(ThreadGuard.protect(new InternetExplorerDriver()));
                     break;
                 default:
                     log.info("Please pass the correct browser value: " + browser);
